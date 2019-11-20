@@ -34,8 +34,8 @@ namespace LibreHardwareMonitor.Hardware.Network
             ActivateSensor(_downloadSpeed);
             _networkUtilization = new Sensor("Network Utilization", 1, SensorType.Load, this, settings);
             ActivateSensor(_networkUtilization);
-            _bytesUploaded = NetworkInterface.GetIPStatistics().BytesSent;
-            _bytesDownloaded = NetworkInterface.GetIPStatistics().BytesReceived;
+//            _bytesUploaded = NetworkInterface.GetIPStatistics().BytesSent; // Not available in netfx40
+//            _bytesDownloaded = NetworkInterface.GetIPStatistics().BytesReceived; // Not available in netfx40
             _lastTick = Stopwatch.GetTimestamp();
         }
 

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using LibreHardwareMonitor.Interop;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.Storage
 {
@@ -29,7 +30,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
         /// <summary>
         /// Gets the SMART attributes.
         /// </summary>
-        public IReadOnlyList<SmartAttribute> SmartAttributes => _smartAttributes;
+        public IReadOnlyList<SmartAttribute> SmartAttributes => _smartAttributes.AsIReadOnlyList();
 
         internal AtaStorage(StorageInfo storageInfo, ISmart smart, string name, string firmwareRevision, string id, int index, IEnumerable<SmartAttribute> smartAttributes, ISettings settings)
           : base(storageInfo, name, firmwareRevision, id, index, settings)

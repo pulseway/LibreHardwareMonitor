@@ -29,7 +29,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
             bool result = false;
             Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS buffers = Kernel32.CreateStruct<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
 
-            buffers.Spt.Length = (ushort)Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH>();
+            buffers.Spt.Length = (ushort)Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH));
             buffers.Spt.PathId = 0;
             buffers.Spt.TargetId = 0;
             buffers.Spt.Lun = 0;
@@ -47,7 +47,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
             buffers.Spt.DataIn = (byte)Kernel32.SCSI_IOCTL_DATA.SCSI_IOCTL_DATA_OUT;
             buffers.DataBuf[0] = 1;
 
-            int length = Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
+            int length = Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS));
             IntPtr buffer = Marshal.AllocHGlobal(length);
             Marshal.StructureToPtr(buffers, buffer, false);
             bool validTransfer = Kernel32.DeviceIoControl(hDevice, Kernel32.IOCTL.IOCTL_SCSI_PASS_THROUGH, buffer, length, buffer, length, out _, IntPtr.Zero);
@@ -57,15 +57,15 @@ namespace LibreHardwareMonitor.Hardware.Storage
             {
                 //read data from samsung SSD
                 buffers = Kernel32.CreateStruct<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
-                buffers.Spt.Length = (ushort)Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH>();
+                buffers.Spt.Length = (ushort)Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH));
                 buffers.Spt.PathId = 0;
                 buffers.Spt.TargetId = 0;
                 buffers.Spt.Lun = 0;
                 buffers.Spt.SenseInfoLength = 24;
                 buffers.Spt.DataTransferLength = (uint)buffers.DataBuf.Length;
                 buffers.Spt.TimeOutValue = 2;
-                buffers.Spt.DataBufferOffset = Marshal.OffsetOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>(nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.DataBuf));
-                buffers.Spt.SenseInfoOffset = (uint)Marshal.OffsetOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>(nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.SenseBuf));
+                buffers.Spt.DataBufferOffset = Marshal.OffsetOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS), nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.DataBuf));
+                buffers.Spt.SenseInfoOffset = (uint)Marshal.OffsetOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS), nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.SenseBuf));
                 buffers.Spt.CdbLength = 16;
                 buffers.Spt.Cdb[0] = 0xA2; // SECURITY PROTOCOL IN
                 buffers.Spt.Cdb[1] = 0xFE; // Samsung Protocol
@@ -74,17 +74,17 @@ namespace LibreHardwareMonitor.Hardware.Storage
                 buffers.Spt.Cdb[9] = 0; // Transfer Length (low)
                 buffers.Spt.DataIn = (byte)Kernel32.SCSI_IOCTL_DATA.SCSI_IOCTL_DATA_IN;
 
-                length = Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
+                length = Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS));
                 buffer = Marshal.AllocHGlobal(length);
                 Marshal.StructureToPtr(buffers, buffer, false);
 
                 validTransfer = Kernel32.DeviceIoControl(hDevice, Kernel32.IOCTL.IOCTL_SCSI_PASS_THROUGH, buffer, length, buffer, length, out _, IntPtr.Zero);
                 if (validTransfer)
                 {
-                    var offset = Marshal.OffsetOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>(nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.DataBuf));
+                    var offset = Marshal.OffsetOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS), nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.DataBuf));
                     IntPtr newPtr = IntPtr.Add(buffer, offset.ToInt32());
-                    var item = Marshal.PtrToStructure<Kernel32.NVME_IDENTIFY_CONTROLLER_DATA>(newPtr);
-                    data = item;
+                    var item = Marshal.PtrToStructure(newPtr, typeof(Kernel32.NVME_IDENTIFY_CONTROLLER_DATA));
+                    data = (Kernel32.NVME_IDENTIFY_CONTROLLER_DATA) item;
                     Marshal.FreeHGlobal(buffer);
                     result = true;
                 }
@@ -106,15 +106,15 @@ namespace LibreHardwareMonitor.Hardware.Storage
             bool result = false;
             Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS buffers = Kernel32.CreateStruct<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
 
-            buffers.Spt.Length = (ushort)Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH>();
+            buffers.Spt.Length = (ushort)Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH));
             buffers.Spt.PathId = 0;
             buffers.Spt.TargetId = 0;
             buffers.Spt.Lun = 0;
             buffers.Spt.SenseInfoLength = 24;
             buffers.Spt.DataTransferLength = (uint)buffers.DataBuf.Length;
             buffers.Spt.TimeOutValue = 2;
-            buffers.Spt.DataBufferOffset = Marshal.OffsetOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>(nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.DataBuf));
-            buffers.Spt.SenseInfoOffset = (uint)Marshal.OffsetOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>(nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.SenseBuf));
+            buffers.Spt.DataBufferOffset = Marshal.OffsetOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS), nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.DataBuf));
+            buffers.Spt.SenseInfoOffset = (uint)Marshal.OffsetOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS), nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.SenseBuf));
             buffers.Spt.CdbLength = 16;
             buffers.Spt.Cdb[0] = 0xB5; // SECURITY PROTOCOL IN
             buffers.Spt.Cdb[1] = 0xFE; // Samsung Protocol
@@ -128,7 +128,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
             buffers.DataBuf[6] = 0xff;
             buffers.DataBuf[7] = 0xff;
 
-            int length = Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
+            int length = Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS));
             IntPtr buffer = Marshal.AllocHGlobal(length);
             Marshal.StructureToPtr(buffers, buffer, false);
             bool validTransfer = Kernel32.DeviceIoControl(hDevice, Kernel32.IOCTL.IOCTL_SCSI_PASS_THROUGH, buffer, length, buffer, length, out _, IntPtr.Zero);
@@ -138,15 +138,15 @@ namespace LibreHardwareMonitor.Hardware.Storage
             {
                 //read data from samsung SSD
                 buffers = Kernel32.CreateStruct<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
-                buffers.Spt.Length = (ushort)Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH>();
+                buffers.Spt.Length = (ushort)Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH));
                 buffers.Spt.PathId = 0;
                 buffers.Spt.TargetId = 0;
                 buffers.Spt.Lun = 0;
                 buffers.Spt.SenseInfoLength = 24;
                 buffers.Spt.DataTransferLength = (uint)buffers.DataBuf.Length;
                 buffers.Spt.TimeOutValue = 2;
-                buffers.Spt.DataBufferOffset = Marshal.OffsetOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>(nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.DataBuf));
-                buffers.Spt.SenseInfoOffset = (uint)Marshal.OffsetOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>(nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.SenseBuf));
+                buffers.Spt.DataBufferOffset = Marshal.OffsetOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS), nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.DataBuf));
+                buffers.Spt.SenseInfoOffset = (uint)Marshal.OffsetOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS), nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.SenseBuf));
                 buffers.Spt.CdbLength = 16;
                 buffers.Spt.Cdb[0] = 0xA2; // SECURITY PROTOCOL IN
                 buffers.Spt.Cdb[1] = 0xFE; // Samsung Protocol
@@ -155,17 +155,17 @@ namespace LibreHardwareMonitor.Hardware.Storage
                 buffers.Spt.Cdb[9] = 0; // Transfer Length (low)
                 buffers.Spt.DataIn = (byte)Kernel32.SCSI_IOCTL_DATA.SCSI_IOCTL_DATA_IN;
 
-                length = Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
+                length = Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS));
                 buffer = Marshal.AllocHGlobal(length);
                 Marshal.StructureToPtr(buffers, buffer, false);
 
                 validTransfer = Kernel32.DeviceIoControl(hDevice, Kernel32.IOCTL.IOCTL_SCSI_PASS_THROUGH, buffer, length, buffer, length, out _, IntPtr.Zero);
                 if (validTransfer)
                 {
-                    var offset = Marshal.OffsetOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>(nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.DataBuf));
+                    var offset = Marshal.OffsetOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS), nameof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS.DataBuf));
                     IntPtr newPtr = IntPtr.Add(buffer, offset.ToInt32());
-                    var item = Marshal.PtrToStructure<Kernel32.NVME_HEALTH_INFO_LOG>(newPtr);
-                    data = item;
+                    var item = Marshal.PtrToStructure(newPtr, typeof(Kernel32.NVME_HEALTH_INFO_LOG));
+                    data = (Kernel32.NVME_HEALTH_INFO_LOG) item;
                     Marshal.FreeHGlobal(buffer);
                     result = true;
                 }
@@ -187,7 +187,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
 
             Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS buffers = Kernel32.CreateStruct<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
 
-            buffers.Spt.Length = (ushort)Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH>();
+            buffers.Spt.Length = (ushort)Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH));
             buffers.Spt.PathId = 0;
             buffers.Spt.TargetId = 0;
             buffers.Spt.Lun = 0;
@@ -205,7 +205,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
             buffers.Spt.DataIn = (byte)Kernel32.SCSI_IOCTL_DATA.SCSI_IOCTL_DATA_OUT;
             buffers.DataBuf[0] = 1;
 
-            int length = Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
+            int length = Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS));
             IntPtr buffer = Marshal.AllocHGlobal(length);
             Marshal.StructureToPtr(buffers, buffer, false);
             bool validTransfer = Kernel32.DeviceIoControl(handle, Kernel32.IOCTL.IOCTL_SCSI_PASS_THROUGH, buffer, length, buffer, length, out _, IntPtr.Zero);
@@ -215,7 +215,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
             {
                 //read data from samsung SSD
                 buffers = Kernel32.CreateStruct<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
-                buffers.Spt.Length = (ushort)Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH>();
+                buffers.Spt.Length = (ushort)Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH));
                 buffers.Spt.PathId = 0;
                 buffers.Spt.TargetId = 0;
                 buffers.Spt.Lun = 0;
@@ -232,14 +232,14 @@ namespace LibreHardwareMonitor.Hardware.Storage
                 buffers.Spt.Cdb[9] = 0;
                 buffers.Spt.DataIn = (byte)Kernel32.SCSI_IOCTL_DATA.SCSI_IOCTL_DATA_IN;
 
-                length = Marshal.SizeOf<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>();
+                length = Marshal.SizeOf(typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS));
                 buffer = Marshal.AllocHGlobal(length);
                 Marshal.StructureToPtr(buffers, buffer, false);
 
                 validTransfer = Kernel32.DeviceIoControl(handle, Kernel32.IOCTL.IOCTL_SCSI_PASS_THROUGH, buffer, length, buffer, length, out _, IntPtr.Zero);
                 if (validTransfer)
                 {
-                    Marshal.PtrToStructure<Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS>(buffer);
+                    Marshal.PtrToStructure(buffer, typeof(Kernel32.SCSI_PASS_THROUGH_WITH_BUFFERS));
                     Marshal.FreeHGlobal(buffer);
                 }
                 else

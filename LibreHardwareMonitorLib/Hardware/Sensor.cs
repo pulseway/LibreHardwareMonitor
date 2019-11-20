@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware
 {
@@ -44,7 +45,7 @@ namespace LibreHardwareMonitor.Hardware
                     parameters[i] = new Parameter(parameterDescriptions[i], this, settings);
             }
 
-            Parameters = parameters;
+            Parameters = parameters.AsIReadOnlyList();
 
             _settings = settings;
             _defaultName = name;

@@ -183,7 +183,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
                 catch (ManagementException managementException)
                 {
                     // Invalid query.
-                    if (managementException.HResult == -2146233087)
+//                    if (managementException.HResult == -2146233087) // Not available in netfx40
                     {
                         DeactivateSensor(_sensorDiskTotalActivity);
                         DeactivateSensor(_sensorDiskWriteActivity);

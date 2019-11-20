@@ -45,7 +45,7 @@ namespace LibreHardwareMonitor.Hardware.Memory
 
         public override void Update()
         {
-            Kernel32.MEMORYSTATUSEX status = new Kernel32.MEMORYSTATUSEX { dwLength = (uint)Marshal.SizeOf<Kernel32.MEMORYSTATUSEX>() };
+            Kernel32.MEMORYSTATUSEX status = new Kernel32.MEMORYSTATUSEX { dwLength = (uint)Marshal.SizeOf(typeof(Kernel32.MEMORYSTATUSEX)) };
 
             if (!Kernel32.GlobalMemoryStatusEx(ref status))
                 return;

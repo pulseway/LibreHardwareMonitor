@@ -46,7 +46,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
             };
 
             return Kernel32.DeviceIoControl(_handle, Kernel32.DFP.DFP_SEND_DRIVE_COMMAND, ref parameter, Marshal.SizeOf(parameter),
-                out Kernel32.SENDCMDOUTPARAMS _, Marshal.SizeOf<Kernel32.SENDCMDOUTPARAMS>(), out _, IntPtr.Zero);
+                out Kernel32.SENDCMDOUTPARAMS _, Marshal.SizeOf(typeof(Kernel32.SENDCMDOUTPARAMS)), out _, IntPtr.Zero);
         }
 
         public Kernel32.SMART_ATTRIBUTE[] ReadSmartData()
@@ -65,7 +65,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
             };
 
             bool isValid = Kernel32.DeviceIoControl(_handle, Kernel32.DFP.DFP_RECEIVE_DRIVE_DATA, ref parameter, Marshal.SizeOf(parameter),
-                out Kernel32.ATTRIBUTECMDOUTPARAMS result, Marshal.SizeOf<Kernel32.ATTRIBUTECMDOUTPARAMS>(), out _, IntPtr.Zero);
+                out Kernel32.ATTRIBUTECMDOUTPARAMS result, Marshal.SizeOf(typeof(Kernel32.ATTRIBUTECMDOUTPARAMS)), out _, IntPtr.Zero);
 
             return isValid ? result.Attributes : new Kernel32.SMART_ATTRIBUTE[0];
         }
@@ -86,7 +86,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
             };
 
             bool isValid = Kernel32.DeviceIoControl(_handle, Kernel32.DFP.DFP_RECEIVE_DRIVE_DATA, ref parameter, Marshal.SizeOf(parameter),
-                out Kernel32.THRESHOLDCMDOUTPARAMS result, Marshal.SizeOf<Kernel32.THRESHOLDCMDOUTPARAMS>(), out _, IntPtr.Zero);
+                out Kernel32.THRESHOLDCMDOUTPARAMS result, Marshal.SizeOf(typeof(Kernel32.THRESHOLDCMDOUTPARAMS)), out _, IntPtr.Zero);
 
             return isValid ? result.Thresholds : new Kernel32.SMART_THRESHOLD[0];
         }
@@ -103,7 +103,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
             };
 
             bool valid = Kernel32.DeviceIoControl(_handle, Kernel32.DFP.DFP_RECEIVE_DRIVE_DATA, ref parameter, Marshal.SizeOf(parameter),
-                out Kernel32.IDENTIFYCMDOUTPARAMS result, Marshal.SizeOf<Kernel32.IDENTIFYCMDOUTPARAMS>(), out _, IntPtr.Zero);
+                out Kernel32.IDENTIFYCMDOUTPARAMS result, Marshal.SizeOf(typeof(Kernel32.IDENTIFYCMDOUTPARAMS)), out _, IntPtr.Zero);
 
             if (!valid)
             {

@@ -28,7 +28,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
                                               ref query,
                                               Marshal.SizeOf(query),
                                               out Kernel32.STORAGE_DEVICE_DESCRIPTOR_HEADER header,
-                                              Marshal.SizeOf<Kernel32.STORAGE_DEVICE_DESCRIPTOR_HEADER>(),
+                                              Marshal.SizeOf(typeof(Kernel32.STORAGE_DEVICE_DESCRIPTOR_HEADER)),
                                               out _,
                                               IntPtr.Zero))
                 {
@@ -86,7 +86,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
         {
             public StorageInfo(int index, IntPtr descriptorPtr)
             {
-                Kernel32.STORAGE_DEVICE_DESCRIPTOR descriptor = Marshal.PtrToStructure<Kernel32.STORAGE_DEVICE_DESCRIPTOR>(descriptorPtr);
+                Kernel32.STORAGE_DEVICE_DESCRIPTOR descriptor = (Kernel32.STORAGE_DEVICE_DESCRIPTOR) Marshal.PtrToStructure(descriptorPtr, typeof(Kernel32.STORAGE_DEVICE_DESCRIPTOR));
                 Index = index;
                 Vendor = GetString(descriptorPtr, descriptor.VendorIdOffset);
                 Product = GetString(descriptorPtr, descriptor.ProductIdOffset);

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using LibreHardwareMonitor.Hardware.Motherboard.Lpc;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.Motherboard
 {
@@ -52,7 +53,7 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
             else
             {
                 _lpcIO = new LpcIO();
-                superIO = _lpcIO.SuperIO;
+                superIO = _lpcIO.SuperIO.AsIReadOnlyList();
             }
 
             SubHardware = new IHardware[superIO.Count];

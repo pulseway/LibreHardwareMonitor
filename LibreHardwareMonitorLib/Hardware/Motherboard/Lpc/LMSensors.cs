@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using Theraot.Collections;
 
 // ReSharper disable once InconsistentNaming
 
@@ -144,7 +145,7 @@ namespace LibreHardwareMonitor.Hardware.Motherboard.Lpc
 
         public IReadOnlyList<ISuperIO> SuperIO
         {
-            get { return _superIOs; }
+            get { return _superIOs.AsIReadOnlyList(); }
         }
 
         public void Close()

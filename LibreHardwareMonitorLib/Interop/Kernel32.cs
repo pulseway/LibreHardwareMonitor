@@ -65,12 +65,12 @@ namespace LibreHardwareMonitor.Interop
         /// <returns></returns>
         internal static T CreateStruct<T>()
         {
-            int size = Marshal.SizeOf<T>();
+            int size = Marshal.SizeOf(typeof(T));
             var ptr = Marshal.AllocHGlobal(size);
             RtlZeroMemory(ptr, size);
-            var result = Marshal.PtrToStructure<T>(ptr);
+            var result = Marshal.PtrToStructure(ptr, typeof(T));
             Marshal.FreeHGlobal(ptr);
-            return result;
+            return (T) result;
         }
 
         internal static SafeHandle OpenDevice(string devicePath)
