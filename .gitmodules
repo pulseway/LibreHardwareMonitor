@@ -1,6 +1,3 @@
-[submodule "Dependencies/ReadOnlyCollections"]
-	path = Dependencies/ReadOnlyCollections
-	url = git@github.com:mausch/ReadOnlyCollections.git
 [submodule "Dependencies/HidLibrary"]
 	path = Dependencies/HidLibrary
 	url = git@github.com:mikeobrien/HidLibrary.git
