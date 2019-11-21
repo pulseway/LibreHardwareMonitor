@@ -1,4 +1,3 @@
 [submodule "Dependencies/HidLibrary"]
 	path = Dependencies/HidLibrary
-	url = git@github.com:mikeobrien/HidLibrary.git
-	
+	url = git@github.com:pulseway/HidLibrary.git

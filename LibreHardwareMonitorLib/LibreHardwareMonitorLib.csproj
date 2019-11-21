@@ -175,6 +175,6 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)PulsewayHardware.dll $(OutDir)LibreHardwareMonitorLib.dll $(OutDir)HidLibrary.dll $(OutDir)Theraot.Core.dll /keyfile:&quot;$(ProjectDir)MariusMihalec.snk&quot;" />
+    <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)PulsewayHardware.dll $(OutDir)LibreHardwareMonitorLib.dll $(OutDir)HidLibrary.dll $(OutDir)Theraot.Core.dll /keyfile:&quot;$(ProjectDir)MariusMihalec.snk&quot;&#xD;&#xA;if /I &quot;$(ConfigurationName)&quot; == &quot;Release&quot; call &quot;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\signtool.exe&quot; sign /t http://timestamp.digicert.com /a $(OutDir)PulsewayHardware.dll" />
   </Target>
 </Project>
