@@ -1,7 +1,7 @@
-// Mozilla Public License 2.0
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// Copyright (C) LibreHardwareMonitor and Contributors
-// All Rights Reserved
+// Copyright (C) LibreHardwareMonitor and Contributors.
+// All Rights Reserved.
 
 using System;
 using System.IO;
@@ -209,6 +209,12 @@ namespace LibreHardwareMonitor.Interop
 
         [DllImport(DllName, CallingConvention = CallingConvention.Winapi)]
         internal static extern IntPtr GetCurrentThread();
+        
+        [DllImport(DllName, CallingConvention = CallingConvention.Winapi)]
+        public static extern ushort GetActiveProcessorGroupCount();
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Winapi)]
+        public static extern bool SetThreadGroupAffinity(IntPtr thread, ref GROUP_AFFINITY groupAffinity, out GROUP_AFFINITY previousGroupAffinity);
 
         [DllImport(DllName, CallingConvention = CallingConvention.Winapi)]
         internal static extern IntPtr VirtualAlloc(IntPtr lpAddress, UIntPtr dwSize, MEM flAllocationType, PAGE flProtect);
@@ -244,6 +250,18 @@ namespace LibreHardwareMonitor.Interop
 
         [DllImport(DllName, CallingConvention = CallingConvention.Winapi, SetLastError = true)]
         internal static extern int GetSystemFirmwareTable(Provider firmwareTableProviderSignature, int firmwareTableID, IntPtr firmwareTableBuffer, int bufferSize);
+
+        [StructLayout(LayoutKind.Sequential, Pack = 4)]
+        public struct GROUP_AFFINITY
+        {
+            public UIntPtr Mask;
+
+            [MarshalAs(UnmanagedType.U2)]
+            public ushort Group;
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3, ArraySubType = UnmanagedType.U2)]
+            public ushort[] Reserved;
+        }
 
         internal enum DFP : uint
         {
@@ -431,6 +449,13 @@ namespace LibreHardwareMonitor.Interop
             NVMeDataTypeIdentify,
             NVMeDataTypeLogPage,
             NVMeDataTypeFeature
+        }
+
+        internal enum STORAGE_PROTOCOL_NVME_PROTOCOL_DATA_REQUEST_VALUE
+        {
+            NVMeIdentifyCnsSpecificNamespace = 0,
+            NVMeIdentifyCnsController = 1,
+            NVMeIdentifyCnsActiveNamespaces = 2
         }
 
         internal enum STORAGE_PROTOCOL_TYPE

@@ -19,6 +19,7 @@
     <PackageTags>libre open hardware monitor monitoring system logging cpu gpu</PackageTags>
     <Pack>true</Pack>
     <RepositoryUrl>https://github.com/LibreHardwareMonitor/LibreHardwareMonitor</RepositoryUrl>
+    <LangVersion>latest</LangVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MariusMihalec.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -36,6 +37,11 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net40|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\Licenses\LICENSE" Pack="true" Visible="false" PackagePath="" />
     <None Include="MariusMihalec.snk" />
@@ -48,11 +54,16 @@
 
   <ItemGroup>
     <Compile Include="Hardware\Control.cs" />
+    <Compile Include="Hardware\Controller\AeroCool\AeroCoolGroup.cs" />
+    <Compile Include="Hardware\Controller\AeroCool\P7-H1.cs" />
     <Compile Include="Hardware\Controller\AquaComputer\AquaComputerGroup.cs" />
     <Compile Include="Hardware\Controller\AquaComputer\AquastreamXT.cs" />
     <Compile Include="Hardware\Controller\AquaComputer\MPS.cs" />
     <Compile Include="Hardware\Controller\Heatmaster\Heatmaster.cs" />
     <Compile Include="Hardware\Controller\Heatmaster\HeatmasterGroup.cs" />
+    <Compile Include="Hardware\Controller\Nzxt\KrakenX3.cs" />
+    <Compile Include="Hardware\Controller\Nzxt\NzxtGroup.cs" />
+    <Compile Include="Hardware\GroupAffinity.cs" />
     <Compile Include="Interop\Ftd2xx.cs" />
     <Compile Include="Hardware\Controller\TBalancer\TBalancer.cs" />
     <Compile Include="Hardware\Controller\TBalancer\TBalancerGroup.cs" />
@@ -167,14 +178,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dependencies\HidLibrary\src\HidLibrary\HidLibrary.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="System.Management" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dependencies\HidSharp\HidSharp\HidSharp.csproj" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)PulsewayHardware.dll $(OutDir)LibreHardwareMonitorLib.dll $(OutDir)HidLibrary.dll $(OutDir)Theraot.Core.dll /keyfile:&quot;$(ProjectDir)MariusMihalec.snk&quot;&#xD;&#xA;if /I &quot;$(ConfigurationName)&quot; == &quot;Release&quot; call &quot;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\signtool.exe&quot; sign /t http://timestamp.digicert.com /a $(OutDir)PulsewayHardware.dll" />
+    <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)PulsewayHardware.dll $(OutDir)LibreHardwareMonitorLib.dll $(OutDir)HidSharp.dll $(OutDir)Theraot.Core.dll /keyfile:&quot;$(ProjectDir)MariusMihalec.snk&quot;&#xD;&#xA;if /I &quot;$(ConfigurationName)&quot; == &quot;Release&quot; call &quot;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\signtool.exe&quot; sign /t http://timestamp.digicert.com /a $(OutDir)PulsewayHardware.dll" />
   </Target>
 </Project>
