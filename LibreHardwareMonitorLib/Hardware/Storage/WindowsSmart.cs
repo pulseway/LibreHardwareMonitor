@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using LibreHardwareMonitor.Interop;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.Storage
 {
@@ -114,8 +115,8 @@ namespace LibreHardwareMonitor.Hardware.Storage
                 return false;
             }
 
-            name = GetString(result.Identify.ModelNumber);
-            firmwareRevision = GetString(result.Identify.FirmwareRevision);
+            name = GetString(result.Identify.ModelNumber.AsIReadOnlyList());
+            firmwareRevision = GetString(result.Identify.FirmwareRevision.AsIReadOnlyList());
             return true;
         }
 

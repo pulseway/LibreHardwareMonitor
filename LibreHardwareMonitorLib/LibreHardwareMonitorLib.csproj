@@ -37,6 +37,11 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net40|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\Licenses\LICENSE" Pack="true" Visible="false" PackagePath="" />
     <None Include="MariusMihalec.snk" />
@@ -173,14 +178,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dependencies\HidLibrary\src\HidLibrary\HidLibrary.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="System.Management" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dependencies\HidSharp\HidSharp\HidSharp.csproj" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)PulsewayHardware.dll $(OutDir)LibreHardwareMonitorLib.dll $(OutDir)HidLibrary.dll $(OutDir)Theraot.Core.dll /keyfile:&quot;$(ProjectDir)MariusMihalec.snk&quot;&#xD;&#xA;if /I &quot;$(ConfigurationName)&quot; == &quot;Release&quot; call &quot;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\signtool.exe&quot; sign /t http://timestamp.digicert.com /a $(OutDir)PulsewayHardware.dll" />
+    <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)PulsewayHardware.dll $(OutDir)LibreHardwareMonitorLib.dll $(OutDir)HidSharp.dll $(OutDir)Theraot.Core.dll /keyfile:&quot;$(ProjectDir)MariusMihalec.snk&quot;&#xD;&#xA;if /I &quot;$(ConfigurationName)&quot; == &quot;Release&quot; call &quot;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\signtool.exe&quot; sign /t http://timestamp.digicert.com /a $(OutDir)PulsewayHardware.dll" />
   </Target>
 </Project>

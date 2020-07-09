@@ -1,0 +1,3 @@
+[submodule "Dependencies/HidSharp"]
+	path = Dependencies/HidSharp
+	url = git@github.com:pulseway/HidSharp.git

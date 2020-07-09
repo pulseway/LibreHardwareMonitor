@@ -29,7 +29,7 @@ namespace LibreHardwareMonitor.Hardware.Controller.AeroCool
             {
                 _running = true;
 
-                Task.Run(ReadStream);
+                Task.Factory.StartNew(ReadStream);
 
                 for (int i = 0; i < 5; i++)
                 {
