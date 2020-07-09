@@ -19,6 +19,7 @@
     <PackageTags>libre open hardware monitor monitoring system logging cpu gpu</PackageTags>
     <Pack>true</Pack>
     <RepositoryUrl>https://github.com/LibreHardwareMonitor/LibreHardwareMonitor</RepositoryUrl>
+    <LangVersion>latest</LangVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MariusMihalec.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -48,11 +49,16 @@
 
   <ItemGroup>
     <Compile Include="Hardware\Control.cs" />
+    <Compile Include="Hardware\Controller\AeroCool\AeroCoolGroup.cs" />
+    <Compile Include="Hardware\Controller\AeroCool\P7-H1.cs" />
     <Compile Include="Hardware\Controller\AquaComputer\AquaComputerGroup.cs" />
     <Compile Include="Hardware\Controller\AquaComputer\AquastreamXT.cs" />
     <Compile Include="Hardware\Controller\AquaComputer\MPS.cs" />
     <Compile Include="Hardware\Controller\Heatmaster\Heatmaster.cs" />
     <Compile Include="Hardware\Controller\Heatmaster\HeatmasterGroup.cs" />
+    <Compile Include="Hardware\Controller\Nzxt\KrakenX3.cs" />
+    <Compile Include="Hardware\Controller\Nzxt\NzxtGroup.cs" />
+    <Compile Include="Hardware\GroupAffinity.cs" />
     <Compile Include="Interop\Ftd2xx.cs" />
     <Compile Include="Hardware\Controller\TBalancer\TBalancer.cs" />
     <Compile Include="Hardware\Controller\TBalancer\TBalancerGroup.cs" />

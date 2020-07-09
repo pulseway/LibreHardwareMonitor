@@ -1,16 +1,18 @@
-﻿// Mozilla Public License 2.0
+﻿// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 // If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
-// Copyright (C) LibreHardwareMonitor and Contributors
-// All Rights Reserved
+// Copyright (C) LibreHardwareMonitor and Contributors.
+// Partial Copyright (C) Michael Möller <mmoeller@openhardwaremonitor.org> and Contributors.
+// All Rights Reserved.
 
 using System.Collections.Generic;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.Storage
 {
     [NamePrefix(""), RequireSmart(0x01), RequireSmart(0x09), RequireSmart(0x0C), RequireSmart(0xD1), RequireSmart(0xCE), RequireSmart(0xCF)]
     internal class SsdIndilinx : AtaStorage
     {
-        private static new readonly IEnumerable<SmartAttribute> SmartAttributes = new List<SmartAttribute>
+        private static readonly IReadOnlyList<SmartAttribute> _smartAttributes = new List<SmartAttribute>
         {
             new SmartAttribute(0x01, SmartNames.ReadErrorRate),
             new SmartAttribute(0x09, SmartNames.PowerOnHours),
@@ -34,9 +36,10 @@ namespace LibreHardwareMonitor.Hardware.Storage
             new SmartAttribute(0xD2, SmartNames.UnknownUnique),
             new SmartAttribute(0xD3, SmartNames.SataErrorCountCrc),
             new SmartAttribute(0xD4, SmartNames.SataErrorCountHandshake)
-        };
+        }.AsIReadOnlyList();
 
         public SsdIndilinx(StorageInfo storageInfo, ISmart smart, string name, string firmwareRevision, int index, ISettings settings)
-            : base(storageInfo, smart, name, firmwareRevision, "ssd", index, SmartAttributes, settings) { }
+            : base(storageInfo, smart, name, firmwareRevision, "ssd", index, _smartAttributes, settings)
+        { }
     }
 }
