@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Text;
 using HidSharp;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.Controller.AquaComputer
 {
@@ -63,7 +64,7 @@ namespace LibreHardwareMonitor.Hardware.Controller.AquaComputer
             }
         }
 
-        public IEnumerable<IHardware> Hardware => _hardware;
+        public IReadOnlyList<IHardware> Hardware => _hardware.ToReadOnlyCollection();
 
         public void Close()
         {

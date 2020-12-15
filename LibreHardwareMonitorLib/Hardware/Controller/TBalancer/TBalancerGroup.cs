@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 using LibreHardwareMonitor.Interop;
+using Theraot.Collections;
 
 // ReSharper disable InconsistentNaming
 
@@ -25,25 +26,19 @@ namespace LibreHardwareMonitor.Hardware.Controller.TBalancer
             uint numDevices;
             try
             {
+                if (!Ftd2xx.DllExists())
+                {
+                    _report.AppendLine("Status: missing DLL");
+                    return;
+                }
+
                 if (Ftd2xx.FT_CreateDeviceInfoList(out numDevices) != Ftd2xx.FT_STATUS.FT_OK)
                 {
                     _report.AppendLine("Status: FT_CreateDeviceInfoList failed");
                     return;
                 }
             }
-            catch (DllNotFoundException)
-            {
-                return;
-            }
-            catch (ArgumentNullException)
-            {
-                return;
-            }
-            catch (EntryPointNotFoundException)
-            {
-                return;
-            }
-            catch (BadImageFormatException)
+            catch (Exception e) when (e is DllNotFoundException || e is ArgumentNullException || e is EntryPointNotFoundException || e is BadImageFormatException)
             {
                 return;
             }
@@ -160,7 +155,7 @@ namespace LibreHardwareMonitor.Hardware.Controller.TBalancer
             }
         }
 
-        public IEnumerable<IHardware> Hardware => _hardware;
+        public IReadOnlyList<IHardware> Hardware => _hardware.ToReadOnlyCollection();
 
         public string GetReport()
         {

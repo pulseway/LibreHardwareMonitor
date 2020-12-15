@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Management;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.Storage
 {
@@ -44,7 +45,7 @@ namespace LibreHardwareMonitor.Hardware.Storage
             mosDisks.Dispose();
         }
 
-        public IEnumerable<IHardware> Hardware => _hardware;
+        public IReadOnlyList<IHardware> Hardware => _hardware.ToReadOnlyCollection();
 
         public string GetReport()
         {

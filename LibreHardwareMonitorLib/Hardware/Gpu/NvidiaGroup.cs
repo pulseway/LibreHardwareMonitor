@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using LibreHardwareMonitor.Interop;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.Gpu
 {
@@ -57,7 +58,7 @@ namespace LibreHardwareMonitor.Hardware.Gpu
                     NvApi.NvDisplayHandle displayHandle = new NvApi.NvDisplayHandle();
                     status = NvApi.NvAPI_EnumNvidiaDisplayHandle(i, ref displayHandle);
                     i++;
-                    
+
                     if (status == NvApi.NvStatus.OK)
                     {
                         NvApi.NvPhysicalGpuHandle[] handlesFromDisplay = new NvApi.NvPhysicalGpuHandle[NvApi.MAX_PHYSICAL_GPUS];
@@ -85,7 +86,7 @@ namespace LibreHardwareMonitor.Hardware.Gpu
             _report.AppendLine();
         }
 
-        public IEnumerable<IHardware> Hardware => _hardware;
+        public IReadOnlyList<IHardware> Hardware => _hardware.ToReadOnlyCollection();
 
         public string GetReport()
         {
