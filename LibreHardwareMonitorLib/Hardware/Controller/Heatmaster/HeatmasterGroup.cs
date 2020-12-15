@@ -12,6 +12,7 @@ using System.Security;
 using System.Text;
 using System.Threading;
 using Microsoft.Win32;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.Controller.Heatmaster
 {
@@ -131,7 +132,7 @@ namespace LibreHardwareMonitor.Hardware.Controller.Heatmaster
             }
         }
 
-        public IEnumerable<IHardware> Hardware => _hardware;
+        public IReadOnlyList<IHardware> Hardware => _hardware.ToReadOnlyCollection();
 
         public string GetReport()
         {

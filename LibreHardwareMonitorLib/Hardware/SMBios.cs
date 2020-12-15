@@ -395,6 +395,36 @@ namespace LibreHardwareMonitor.Hardware
         ACPowerRestored
     }
 
+    public enum CacheDesignation
+    {
+        Other,
+        L1,
+        L2,
+        L3
+    }
+
+    /*
+     * DSP0134 System Management BIOS (SMBIOS) Reference Specification v.3.4.0
+     * Chapter 7.8.5
+     */
+    public enum CacheAssociativity
+    {
+        Other = 1,
+        Unknown,
+        DirectMapped,
+        _2Way,
+        _4Way,
+        FullyAssociative,
+        _8Way,
+        _16Way,
+        _12Way,
+        _24Way,
+        _32Way,
+        _48Way,
+        _64Way,
+        _20Way,
+    }
+
     public class InformationBase
     {
         private readonly byte[] _data;
@@ -661,6 +691,36 @@ namespace LibreHardwareMonitor.Hardware
         public string Version { get; }
     }
 
+    public class ProcessorCache : InformationBase
+    {
+        internal ProcessorCache(byte type, ushort handle, byte[] data, string[] strings) : base(type, handle, data, strings)
+        {
+            Designation = ParseCacheDesignation();
+            Associativity = (CacheAssociativity)GetByte(0x12);
+            Size = GetWord(0x09);
+        }
+
+        private CacheDesignation ParseCacheDesignation()
+        {
+            string rawCacheType = GetString(0x04);
+
+            if (rawCacheType.Contains("L1"))
+                return CacheDesignation.L1;
+            else if (rawCacheType.Contains("L2"))
+                return CacheDesignation.L2;
+            else if (rawCacheType.Contains("L3"))
+                return CacheDesignation.L3;
+            else
+                return CacheDesignation.Other;
+        }
+
+        public CacheDesignation Designation { get; }
+
+        public CacheAssociativity Associativity { get; }
+
+        public int Size { get; }
+    }
+
     public class MemoryDevice : InformationBase
     {
         internal MemoryDevice(byte type, ushort handle, byte[] data, string[] strings) : base(type, handle, data, strings)
@@ -671,6 +731,10 @@ namespace LibreHardwareMonitor.Hardware
             SerialNumber = GetString(0x18).Trim();
             PartNumber = GetString(0x1A).Trim();
             Speed = GetWord(0x15);
+            Size = GetWord(0x0C);
+
+            if (GetWord(0x1C) > 0)
+                Size += GetWord(0x1C);
         }
 
         public string BankLocator { get; }
@@ -684,6 +748,7 @@ namespace LibreHardwareMonitor.Hardware
         public string SerialNumber { get; }
 
         public int Speed { get; }
+        public int Size { get; }
     }
 
     public class SMBios
@@ -717,6 +782,7 @@ namespace LibreHardwareMonitor.Hardware
             else
             {
                 List<MemoryDevice> memoryDeviceList = new List<MemoryDevice>();
+                List<ProcessorCache> processorCacheList = new List<ProcessorCache>();
 
                 _raw = null;
                 byte majorVersion = 0;
@@ -798,6 +864,10 @@ namespace LibreHardwareMonitor.Hardware
                             case 0x04:
                                 Processor = new ProcessorInformation(type, handle, data, stringsList.ToArray());
                                 break;
+                            case 0x07:
+                                ProcessorCache c = new ProcessorCache(type, handle, data, stringsList.ToArray());
+                                processorCacheList.Add(c);
+                                break;
                             case 0x11:
                                 MemoryDevice m = new MemoryDevice(type, handle, data, stringsList.ToArray());
                                 memoryDeviceList.Add(m);
@@ -807,6 +877,7 @@ namespace LibreHardwareMonitor.Hardware
                 }
 
                 MemoryDevices = memoryDeviceList.ToArray();
+                ProcessorCaches = processorCacheList.ToArray();
             }
         }
 
@@ -817,6 +888,8 @@ namespace LibreHardwareMonitor.Hardware
         public ChassisInformation Chassis { get; }
 
         public MemoryDevice[] MemoryDevices { get; }
+
+        public ProcessorCache[] ProcessorCaches { get; }
 
         public ProcessorInformation Processor { get; }
 
@@ -977,6 +1050,15 @@ namespace LibreHardwareMonitor.Hardware
                 r.AppendLine();
             }
 
+            for (int i = 0; i < ProcessorCaches.Length; i++)
+            {
+                r.Append("Cache [" + ProcessorCaches[i].Designation.ToString() + "] Size: ");
+                r.AppendLine(ProcessorCaches[i].Size.ToString());
+                r.Append("Cache [" + ProcessorCaches[i].Designation.ToString() + "] Associativity: ");
+                r.AppendLine(ProcessorCaches[i].Associativity.ToString().Replace("_", String.Empty));
+                r.AppendLine();
+            }
+
             for (int i = 0; i < MemoryDevices.Length; i++)
             {
                 r.Append("Memory Device [" + i + "] Manufacturer: ");
@@ -989,7 +1071,9 @@ namespace LibreHardwareMonitor.Hardware
                 r.AppendLine(MemoryDevices[i].BankLocator);
                 r.Append("Memory Device [" + i + "] Speed: ");
                 r.Append(MemoryDevices[i].Speed);
-                r.AppendLine(" MHz");
+                r.AppendLine("Memory Device [" + i + "] Size: ");
+                r.Append(MemoryDevices[i].Size);
+                r.AppendLine(" MB");
                 r.AppendLine();
             }
 

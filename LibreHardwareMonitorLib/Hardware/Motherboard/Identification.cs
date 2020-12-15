@@ -170,6 +170,8 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
                     return Model.RAMPAGE_II_GENE;
                 case var _ when name.Equals("LP BI P45-T2RS Elite", StringComparison.OrdinalIgnoreCase):
                     return Model.LP_BI_P45_T2RS_Elite;
+                case var _ when name.Equals("ROG STRIX X470-I GAMING", StringComparison.OrdinalIgnoreCase):
+                    return Model.ROG_STRIX_X470_I;
                 case var _ when name.Equals("LP DK P55-T3eH9", StringComparison.OrdinalIgnoreCase):
                     return Model.LP_DK_P55_T3EH9;
                 case var _ when name.Equals("A890GXM-A", StringComparison.OrdinalIgnoreCase):
@@ -297,6 +299,8 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
                     return Model.X470_AORUS_GAMING_7_WIFI;
                 case var _ when name.Equals("X570 AORUS MASTER", StringComparison.OrdinalIgnoreCase):
                     return Model.X570_AORUS_MASTER;
+                case var _ when name.Equals("TUF GAMING B550M-PLUS (WI-FI)", StringComparison.OrdinalIgnoreCase):
+                    return Model.TUF_GAMING_B550M_PLUS_WIFI;    
                 case var _ when name.Equals("Base Board Product Name", StringComparison.OrdinalIgnoreCase):
                 case var _ when name.Equals("To be filled by O.E.M.", StringComparison.OrdinalIgnoreCase):
                     return Model.Unknown;

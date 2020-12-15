@@ -5,6 +5,7 @@
 // All Rights Reserved.
 
 using System.Collections.Generic;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.Memory
 {
@@ -28,7 +29,7 @@ namespace LibreHardwareMonitor.Hardware.Memory
             return null;
         }
 
-        public IEnumerable<IHardware> Hardware => _hardware;
+        public IReadOnlyList<IHardware> Hardware => _hardware.ToReadOnlyCollection();
 
         public void Close()
         {

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using LibreHardwareMonitor.Interop;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.Gpu
 {
@@ -103,7 +104,7 @@ namespace LibreHardwareMonitor.Hardware.Gpu
             }
         }
 
-        public IEnumerable<IHardware> Hardware => _hardware;
+        public IReadOnlyList<IHardware> Hardware => _hardware.ToReadOnlyCollection();
 
         public string GetReport()
         {

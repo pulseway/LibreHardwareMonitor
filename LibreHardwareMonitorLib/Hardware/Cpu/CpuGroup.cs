@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Theraot.Collections;
 
 namespace LibreHardwareMonitor.Hardware.CPU
 {
@@ -51,6 +52,7 @@ namespace LibreHardwareMonitor.Hardware.CPU
                                 _hardware.Add(new Amd10Cpu(index, coreThreads, settings));
                                 break;
                             case 0x17:
+                            case 0x19:
                                 _hardware.Add(new Amd17Cpu(index, coreThreads, settings));
                                 break;
                             default:
@@ -68,7 +70,7 @@ namespace LibreHardwareMonitor.Hardware.CPU
             }
         }
 
-        public IEnumerable<IHardware> Hardware => _hardware;
+        public IReadOnlyList<IHardware> Hardware => _hardware.ToReadOnlyCollection();
 
         public string GetReport()
         {
@@ -125,7 +127,7 @@ namespace LibreHardwareMonitor.Hardware.CPU
         private static CpuId[][] GetProcessorThreads()
         {
             List<CpuId> threads = new List<CpuId>();
-            
+
             for (int i = 0; i < ThreadAffinity.ProcessorGroupCount; i++)
             {
                 for (int j = 0; j < 64; j++)

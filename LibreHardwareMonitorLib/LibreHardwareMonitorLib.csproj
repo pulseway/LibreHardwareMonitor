@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>net40</TargetFrameworks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -12,22 +11,20 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Authors>Libre Hardware Monitor contributors</Authors>
-    <PackageId>LibreHardwareMonitorLib</PackageId>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageId>$(AssemblyName)</PackageId>
+    <PackageLicense>https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/master/Licenses/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/LibreHardwareMonitor/LibreHardwareMonitor</PackageProjectUrl>
     <PackageTags>libre open hardware monitor monitoring system logging cpu gpu</PackageTags>
+    <PackageVersion>$(Version)</PackageVersion>
     <Pack>true</Pack>
     <RepositoryUrl>https://github.com/LibreHardwareMonitor/LibreHardwareMonitor</RepositoryUrl>
     <LangVersion>latest</LangVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MariusMihalec.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <OutputPath>..\bin\Debug\</OutputPath>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <OutputPath>..\bin\Release\</OutputPath>
   </PropertyGroup>
@@ -180,7 +177,6 @@
   <ItemGroup>
     <Reference Include="System.Management" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Dependencies\HidSharp\HidSharp\HidSharp.csproj" />
   </ItemGroup>

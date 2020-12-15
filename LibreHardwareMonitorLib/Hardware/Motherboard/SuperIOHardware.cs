@@ -361,6 +361,51 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
 
                     break;
                 }
+                case Chip.NCT6687D:
+                {
+                    v.Add(new Voltage("+12V", 0));
+                    v.Add(new Voltage("+5V", 1));
+                    v.Add(new Voltage("Vcore", 2));
+                    v.Add(new Voltage("Voltage #1", 3));
+                    v.Add(new Voltage("DIMM", 4));
+                    v.Add(new Voltage("CPU I/O", 5));
+                    v.Add(new Voltage("CPU SA", 6));
+                    v.Add(new Voltage("Voltage #2", 7));
+                    v.Add(new Voltage("AVCC3", 8));
+                    v.Add(new Voltage("VTT", 9));
+                    v.Add(new Voltage("VRef", 10));
+                    v.Add(new Voltage("VSB", 11));
+                    v.Add(new Voltage("AVSB", 12));
+                    v.Add(new Voltage("VBat", 13));
+
+                    t.Add(new Temperature("CPU", 0));
+                    t.Add(new Temperature("System", 1));
+                    t.Add(new Temperature("VRM MOS", 2));
+                    t.Add(new Temperature("PCH", 3));
+                    t.Add(new Temperature("CPU Socket", 4));
+                    t.Add(new Temperature("PCIe x1", 5));
+                    t.Add(new Temperature("M2_1", 6));
+                        
+                    f.Add(new Fan("CPU Fan", 0));
+                    f.Add(new Fan("Pump Fan", 1));
+                    f.Add(new Fan("System Fan #1", 2));
+                    f.Add(new Fan("System Fan #2", 3));
+                    f.Add(new Fan("System Fan #3", 4));
+                    f.Add(new Fan("System Fan #4", 5));
+                    f.Add(new Fan("System Fan #5", 6));
+                    f.Add(new Fan("System Fan #6", 7));
+
+                    c.Add(new Ctrl("CPU Fan", 0));
+                    c.Add(new Ctrl("Pump Fan", 1));
+                    c.Add(new Ctrl("System Fan #1", 2));
+                    c.Add(new Ctrl("System Fan #2", 3));
+                    c.Add(new Ctrl("System Fan #3", 4));
+                    c.Add(new Ctrl("System Fan #4", 5));
+                    c.Add(new Ctrl("System Fan #5", 6));
+                    c.Add(new Ctrl("System Fan #6", 7));
+
+                    break;
+                }
                 default:
                 {
                     GetDefaultConfiguration(superIO, v, t, f, c);
@@ -573,7 +618,7 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
                         case Model.LP_BI_P45_T2RS_Elite: // IT8718F
                         {
                             v.Add(new Voltage("Vcore", 0));
-                            v.Add(new Voltage("FSB VTT", 1));
+                            v.Add(new Voltage("VTT", 1));
                             v.Add(new Voltage("+3.3V", 2));
                             v.Add(new Voltage("+5V", 3, 6.8f, 10));
                             v.Add(new Voltage("+12V", 4, 30, 10));
@@ -986,6 +1031,64 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
         {
             switch (manufacturer)
             {
+                case Manufacturer.ASUS:
+                {
+                    switch (model)
+                    {
+                        case Model.ROG_STRIX_X470_I: // IT8665E
+                        {
+                            v.Add(new Voltage("Vcore", 0));
+                            v.Add(new Voltage("SB 2.5V", 1));
+                            v.Add(new Voltage("+12V", 2, 5, 1));
+                            v.Add(new Voltage("+5V", 3, 1.5f, 1));
+                            v.Add(new Voltage("+3.3V", 7, 10, 10));
+                            v.Add(new Voltage("VBat", 8, 10, 10));
+                            t.Add(new Temperature("CPU", 0));
+                            t.Add(new Temperature("Motherboard", 1));
+                            t.Add(new Temperature("T_Sensor", 2));
+                            t.Add(new Temperature("PCIe x16", 3));
+                            t.Add(new Temperature("VRM", 4));
+                            t.Add(new Temperature("Temperature #6", 5));
+
+                            f.Add(new Fan("CPU Fan", 0));
+
+                            //Does not work when in AIO pump mode (shows 0). I don't know how to fix it.
+                            f.Add(new Fan("Chassis Fan #1", 1));
+                            f.Add(new Fan("Chassis Fan #2", 2));
+
+                            //offset: 2, because the first two always show zero
+                            for (int i = 2; i < superIO.Controls.Length; i++)
+                                c.Add(new Ctrl("Fan Control #" + (i - 1), i));
+
+                            break;
+                        }
+                        default:
+                        {
+                            v.Add(new Voltage("Vcore", 0));
+                            v.Add(new Voltage("Voltage #2", 1, true));
+                            v.Add(new Voltage("Voltage #3", 2, true));
+                            v.Add(new Voltage("Voltage #4", 3, true));
+                            v.Add(new Voltage("Voltage #5", 4, true));
+                            v.Add(new Voltage("Voltage #6", 5, true));
+                            v.Add(new Voltage("Voltage #7", 6, true));
+                            v.Add(new Voltage("Voltage #8", 7, true));
+                            v.Add(new Voltage("VBat", 8));
+
+                            for (int i = 0; i < superIO.Temperatures.Length; i++)
+                                t.Add(new Temperature("Temperature #" + (i + 1), i));
+
+                            for (int i = 0; i < superIO.Fans.Length; i++)
+                                f.Add(new Fan("Fan #" + (i + 1), i));
+
+                            for (int i = 0; i < superIO.Controls.Length; i++)
+                                c.Add(new Ctrl("Fan Control #" + (i + 1), i));
+
+                            break;
+                        }
+                    }
+
+                    break;
+                }
                 case Manufacturer.ECS:
                 {
                     switch (model)
@@ -1083,7 +1186,7 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
                             v.Add(new Voltage("iGPU", 4));
                             v.Add(new Voltage("CPU VRIN", 5));
                             v.Add(new Voltage("DIMM", 6));
-                            v.Add(new Voltage("3VSB", 7, 10, 10, 0));
+                            v.Add(new Voltage("3VSB", 7, 10, 10));
                             v.Add(new Voltage("VBat", 8, 10, 10));
                             t.Add(new Temperature("CPU", 2));
                             t.Add(new Temperature("System", 0));
@@ -1222,7 +1325,7 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
                             t.Add(new Temperature("CPU", 2));
                             t.Add(new Temperature("PCIe x16", 3));
                             t.Add(new Temperature("VRM MOS", 4));
-                            t.Add(new Temperature("System2", 5));
+                            t.Add(new Temperature("System #2", 5));
                             f.Add(new Fan("CPU Fan", 0));
                             f.Add(new Fan("System Fan #1", 1));
                             f.Add(new Fan("System Fan #2", 2));
@@ -2083,6 +2186,56 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
 
                             break;
                         }
+                        case Model.TUF_GAMING_B550M_PLUS_WIFI: //NCT6798D
+                        {
+                            v.Add(new Voltage("Vcore", 0));
+                            v.Add(new Voltage("Voltage #2", 1, true));
+                            v.Add(new Voltage("AVCC", 2, 34, 34));
+                            v.Add(new Voltage("+3.3V", 3, 34, 34));
+                            v.Add(new Voltage("Voltage #5", 4, true));
+                            v.Add(new Voltage("Voltage #6", 5, true));
+                            v.Add(new Voltage("Voltage #7", 6, true));
+                            v.Add(new Voltage("3VSB", 7, 34, 34));
+                            v.Add(new Voltage("VBat", 8, 34, 34));
+                            v.Add(new Voltage("VTT", 9));
+                            v.Add(new Voltage("Voltage #11", 10, true));
+                            v.Add(new Voltage("Voltage #12", 11, true));
+                            v.Add(new Voltage("Voltage #13", 12, true));
+                            v.Add(new Voltage("Voltage #14", 13, true));
+                            v.Add(new Voltage("Voltage #15", 14, true));
+                            t.Add(new Temperature("PECI 0", 0));
+                            t.Add(new Temperature("CPU", 1));
+                            t.Add(new Temperature("System", 2));
+                            t.Add(new Temperature("AUX 0", 3));
+                            t.Add(new Temperature("AUX 1", 4));
+                            t.Add(new Temperature("AUX 2", 5));
+                            t.Add(new Temperature("AUX 3", 6));
+                            t.Add(new Temperature("AUX 4", 7));
+                            t.Add(new Temperature("SMBus 0", 8));
+                            t.Add(new Temperature("SMBus 1", 9));
+                            t.Add(new Temperature("PECI 1", 10));
+                            t.Add(new Temperature("PCH Chip CPU Max", 11));
+                            t.Add(new Temperature("PCH Chip", 12));
+                            t.Add(new Temperature("PCH CPU", 13));
+                            t.Add(new Temperature("PCH MCH", 14));
+                            t.Add(new Temperature("Agent 0 DIMM 0", 15));
+                            t.Add(new Temperature("Agent 0 DIMM 1", 16));
+                            t.Add(new Temperature("Agent 1 DIMM 0", 17));
+                            t.Add(new Temperature("Agent 1 DIMM 1", 18));
+                            t.Add(new Temperature("Device 0", 19));
+                            t.Add(new Temperature("Device 1", 20));
+                            t.Add(new Temperature("PECI 0 Calibrated", 21));
+                            t.Add(new Temperature("PECI 1 Calibrated", 22));
+                            t.Add(new Temperature("Virtual", 23));
+                            
+                            for (int i = 0; i < superIO.Fans.Length; i++)
+                                f.Add(new Fan("Fan #" + (i + 1), i));
+
+                            for (int i = 0; i < superIO.Controls.Length; i++)
+                                c.Add(new Ctrl("Fan Control #" + (i + 1), i));
+
+                            break;
+                        }
                         default:
                         {
                             v.Add(new Voltage("Vcore", 0));
@@ -2169,11 +2322,12 @@ namespace LibreHardwareMonitor.Hardware.Motherboard
                             v.Add(new Voltage("NB/SoC", 12));
                             v.Add(new Voltage("DIMM", 13, 1, 1));
                             //v.Add(new Voltage("Voltage #15", 14, false));
-                            t.Add(new Temperature("CPU", 0));
-                            t.Add(new Temperature("CPU (PECI)", 1));
+                            //t.Add(new Temperature("CPU", 0));
+                            t.Add(new Temperature("CPU", 1));
                             t.Add(new Temperature("System", 2));
-                            t.Add(new Temperature("VR MOSS", 3));
+                            t.Add(new Temperature("VRM MOS", 3));
                             t.Add(new Temperature("PCH", 5));
+                            t.Add(new Temperature("SMBus 0", 8));
                             f.Add(new Fan("Pump Fan", 0));
                             f.Add(new Fan("CPU Fan", 1));
                             f.Add(new Fan("System Fan #1", 2));
